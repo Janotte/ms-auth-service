@@ -1,18 +1,18 @@
-# Setting Server Port
 server:
   port: 8081
+  servlet:
+    context-path: '/auth-service/'
 
 spring:
-  # Configuring the display with colors in the console
   output:
     ansi:
       enabled: Always
-  # Setting datasource
+  application:
+    name: auth-service
   datasource:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/user_db?createDatabaseIfNotExist=true&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
     username: ${MYSQL_DB_USERNAME}
     password: ${MYSQL_DB_PASSWORD}
-  # Setting JPA
   jpa:
     hibernate:
       dialect: org.hibernate.dialect.MySQL8Dialect
