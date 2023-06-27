@@ -2,6 +2,7 @@ package br.net.supptech.authservice.services;
 
 import br.net.supptech.authservice.models.PermissionModel;
 import br.net.supptech.authservice.repositories.PermissionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class PermissionServiceImpl implements PermissionService {
         return permissionRepository.findAll();
     }
 
+    @Transactional
     @Override
     public PermissionModel savePermission(PermissionModel permissionModel) {
         return permissionRepository.save(permissionModel);
@@ -30,13 +32,15 @@ public class PermissionServiceImpl implements PermissionService {
         return permissionRepository.findById(permissionId);
     }
 
-    @Override
-    public void deletePermission(PermissionModel permissionModel) {
-        permissionRepository.delete(permissionModel);
-    }
-
+    @Transactional
     @Override
     public PermissionModel updatePermission(PermissionModel permissionModel) {
         return permissionRepository.save(permissionModel);
+    }
+
+    @Transactional
+    @Override
+    public void deletePermission(PermissionModel permissionModel) {
+        permissionRepository.delete(permissionModel);
     }
 }

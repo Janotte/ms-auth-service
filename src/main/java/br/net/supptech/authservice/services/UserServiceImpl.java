@@ -2,6 +2,7 @@ package br.net.supptech.authservice.services;
 
 import br.net.supptech.authservice.models.UserModel;
 import br.net.supptech.authservice.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    @Transactional
     @Override
     public UserModel saveUser(UserModel userModel) {
         return userRepository.save(userModel);
@@ -29,13 +31,20 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(userId);
     }
 
-    @Override
-    public void deleteUser(UserModel userModel) {
-        userRepository.delete(userModel);
-    }
-
+    @Transactional
     @Override
     public UserModel updateUser(UserModel userModel) {
         return userRepository.save(userModel);
+    }
+
+    @Override
+    public boolean existsUserByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Transactional
+    @Override
+    public void deleteUser(UserModel userModel) {
+        userRepository.delete(userModel);
     }
 }

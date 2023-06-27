@@ -20,42 +20,56 @@ public class PermissionController {
 
     @GetMapping
     public ResponseEntity<?> getAllPermissions() {
-        return ResponseEntity.status(HttpStatus.OK).body(permissionService.getAllPermissions());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(permissionService.getAllPermissions());
     }
 
     @PostMapping
     public ResponseEntity<?> addNewPermission(@RequestBody PermissionDto permissionDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(permissionService.savePermission(permissionDto.toModel()));
+        PermissionModel permissionModel = new PermissionModel();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(permissionService.savePermission(permissionDto.toModel(permissionModel)));
     }
 
     @GetMapping("/{permissionId}")
     public ResponseEntity<?> findPermissionById(@PathVariable(value = "permissionId") UUID permissionId) {
         Optional<PermissionModel> optionalPermissionModel = permissionService.findPermissionById(permissionId);
         return optionalPermissionModel
-                .<ResponseEntity<Object>>map(permissionModel -> ResponseEntity.status(HttpStatus.OK).body(permissionModel))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Permission not found!"));
+                .<ResponseEntity<Object>>map(permissionModel -> ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body(permissionModel))
+                .orElseGet(() -> ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body("Permission not found!"));
     }
 
     @PutMapping("/{permissionId}")
     public ResponseEntity<?> updatePermission(@PathVariable(value = "permissionId") UUID permissionId,
                                               @RequestBody PermissionDto permissionDto) {
         Optional<PermissionModel> optionalPermissionModel = permissionService.findPermissionById(permissionId);
-        if (optionalPermissionModel.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Permission not found.");
-        } else {
-            var permissionModel = permissionDto.toUpdateModel(optionalPermissionModel.get());
-            return ResponseEntity.status(HttpStatus.OK).body(permissionService.updatePermission(permissionModel));
-        }
+        if (optionalPermissionModel.isEmpty())
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Permission not found!");
+        var permissionModel = permissionDto.toModel(optionalPermissionModel.get());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(permissionService.updatePermission(permissionModel));
+
     }
 
     @DeleteMapping("/{permissionId}")
     public ResponseEntity<?> deletePermissionById(@PathVariable(value = "permissionId") UUID permissionId) {
         Optional<PermissionModel> optionalPermissionModel = permissionService.findPermissionById(permissionId);
-        if (optionalPermissionModel.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Permission not found!");
-        } else {
-            permissionService.deletePermission(optionalPermissionModel.get());
-            return ResponseEntity.status(HttpStatus.OK).body("Permission deleted successfully!");
-        }
+        if (optionalPermissionModel.isEmpty())
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Permission not found!");
+        permissionService.deletePermission(optionalPermissionModel.get());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("Permission deleted successfully!");
     }
 }

@@ -27,15 +27,19 @@ public class RoleController {
 
     @GetMapping
     public ResponseEntity<?> getAllRoles() {
-        return ResponseEntity.status(HttpStatus.OK).body(roleService.getAllRoles());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(roleService.getAllRoles());
     }
 
     @PostMapping
     public ResponseEntity<?> addNewRole(@RequestBody RoleDto roleDto) {
-        var roleModel = roleDto.toModel();
+        RoleModel roleModel = new RoleModel();
         Set<PermissionModel> permissionModelSet = getPermissionModels(roleDto);
         roleModel.getPermissions().addAll(permissionModelSet);
-        return ResponseEntity.status(HttpStatus.CREATED).body(roleService.saveRole(roleModel));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(roleService.saveRole(roleDto.toModel(roleModel)));
     }
 
     @GetMapping("/{roleId}")
@@ -43,32 +47,38 @@ public class RoleController {
         Optional<RoleModel> optionalRoleModel = roleService.findRoleById(roleId);
         return optionalRoleModel
                 .<ResponseEntity<Object>>map(roleEntity -> ResponseEntity.status(HttpStatus.OK).body(roleEntity))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Role not found!"));
+                .orElseGet(() -> ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body("Role not found!"));
     }
 
     @PutMapping("/{roleId}")
     public ResponseEntity<?> updateRole(@PathVariable(value = "roleId") UUID roleId,
                                         @RequestBody RoleDto roleDto) {
         Optional<RoleModel> optionalRoleModel = roleService.findRoleById(roleId);
-        if (optionalRoleModel.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Role not found.");
-        } else {
-            var curruntRoleModel = roleDto.toUpdateModel(optionalRoleModel.get());
-            curruntRoleModel.getPermissions().clear();
-            curruntRoleModel.getPermissions().addAll(getPermissionModels(roleDto));
-            return ResponseEntity.status(HttpStatus.OK).body(roleService.updateRole(curruntRoleModel));
-        }
+        if (optionalRoleModel.isEmpty())
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Role not found!");
+        var curruntRoleModel = roleDto.toModel(optionalRoleModel.get());
+        curruntRoleModel.getPermissions().clear();
+        curruntRoleModel.getPermissions().addAll(getPermissionModels(roleDto));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(roleService.updateRole(curruntRoleModel));
     }
 
     @DeleteMapping("/{roleId}")
     public ResponseEntity<?> deleteRoleById(@PathVariable(value = "roleId") UUID roleId) {
         Optional<RoleModel> optionalRoleModel = roleService.findRoleById(roleId);
-        if (optionalRoleModel.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Role not found!");
-        } else {
-            roleService.deleteRole(optionalRoleModel.get());
-            return ResponseEntity.status(HttpStatus.OK).body("Role deleted successfully!");
-        }
+        if (optionalRoleModel.isEmpty())
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Role not found!");
+        roleService.deleteRole(optionalRoleModel.get());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("Role deleted successfully!");
     }
 
     private Set<PermissionModel> getPermissionModels(RoleDto roleDto) {

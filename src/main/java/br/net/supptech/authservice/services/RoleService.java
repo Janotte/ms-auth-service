@@ -17,4 +17,6 @@ public interface RoleService {
     void deleteRole(RoleModel roleModel);
 
     RoleModel updateRole(RoleModel roleModel);
+
+    Optional<RoleModel> findRoleByName(String name);
 }

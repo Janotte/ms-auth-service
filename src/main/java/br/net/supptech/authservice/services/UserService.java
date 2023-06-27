@@ -17,4 +17,6 @@ public interface UserService {
     void deleteUser(UserModel userModel);
 
     UserModel updateUser(UserModel userModel);
+
+    boolean existsUserByEmail(String email);
 }
