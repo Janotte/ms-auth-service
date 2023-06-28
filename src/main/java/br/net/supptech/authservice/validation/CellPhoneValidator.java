@@ -18,8 +18,8 @@ public class CellPhoneValidator implements ConstraintValidator<CellPhone, String
         if (phoneNo.matches("\\d{11}")) return true;
             //validating phone number with -, . or spaces
         else //return false if nothing matches the input
-            if(phoneNo.matches("\\d{3}' '\\d{5}[- ]\\d{4}")) return true;
+            if(phoneNo.matches("\\d{3}[ ]\\d{5}[-\\ ]\\d{4}")) return true;
             //validating phone number where area code is in braces ()
-        else return phoneNo.matches("\\(\\d{3}\\)' '\\d{5}[- ]\\d{4}");
+        else return phoneNo.matches("\\(\\d{3}\\)[ ]\\d{5}[-\\ ]\\d{4}");
     }
 }
