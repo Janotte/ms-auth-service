@@ -2,6 +2,7 @@ package br.net.supptech.authservice.dtos;
 
 import br.net.supptech.authservice.enums.UserStatus;
 import br.net.supptech.authservice.models.UserModel;
+import br.net.supptech.authservice.validation.CellPhone;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.constraints.*;
@@ -47,6 +48,7 @@ public class UserDto {
     private String OldPassword;
     @Size(min = 9, max = 20, groups = {View.CreateUser.class, View.SignUp.class, View.UserUpdate.class})
     @JsonView({View.CreateUser.class, View.SignUp.class, View.UserUpdate.class})
+    @CellPhone(groups = {View.CreateUser.class, View.SignUp.class, View.UserUpdate.class})
     private String cellPhoneNumber;
     @NotBlank(groups = {View.UserImageUpdate.class})
     @Size(max = 255,groups = {View.UserImageUpdate.class})
