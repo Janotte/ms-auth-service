@@ -3,6 +3,7 @@ package br.net.supptech.authservice.controllers.v1;
 import br.net.supptech.authservice.dtos.PermissionDto;
 import br.net.supptech.authservice.models.PermissionModel;
 import br.net.supptech.authservice.services.PermissionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class PermissionController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addNewPermission(@RequestBody PermissionDto permissionDto) {
+    public ResponseEntity<?> addNewPermission(@Valid @RequestBody PermissionDto permissionDto) {
         PermissionModel permissionModel = new PermissionModel();
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -46,7 +47,7 @@ public class PermissionController {
     }
 
     @PutMapping("/{permissionId}")
-    public ResponseEntity<?> updatePermission(@PathVariable(value = "permissionId") UUID permissionId,
+    public ResponseEntity<?> updatePermission(@Valid @PathVariable(value = "permissionId") UUID permissionId,
                                               @RequestBody PermissionDto permissionDto) {
         Optional<PermissionModel> optionalPermissionModel = permissionService.findPermissionById(permissionId);
         if (optionalPermissionModel.isEmpty())

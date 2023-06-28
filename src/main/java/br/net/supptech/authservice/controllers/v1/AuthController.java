@@ -25,7 +25,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(
-            @JsonView(UserDto.UserJsonView.SignUp.class) @RequestBody UserDto userDto) {
+            @JsonView(UserDto.View.SignUp.class) @RequestBody UserDto userDto) {
         if (userService.existsUserByEmail(userDto.getEmail()))
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)

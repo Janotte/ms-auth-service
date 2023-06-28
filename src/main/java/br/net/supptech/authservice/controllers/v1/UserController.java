@@ -6,10 +6,10 @@ import br.net.supptech.authservice.models.RoleModel;
 import br.net.supptech.authservice.models.UserModel;
 import br.net.supptech.authservice.services.RoleService;
 import br.net.supptech.authservice.services.UserService;
-import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -36,8 +36,12 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> createUser(
-            @JsonView(UserDto.UserJsonView.CreateUser.class)
-            @RequestBody  UserDto userDto) {
+            @Validated(UserDto.View.CreateUser.class)
+            @RequestBody UserDto userDto) {
+        if (userService.existsUserByEmail(userDto.getEmail()))
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body("There is already a user with e-mail " + userDto.getEmail() + "!");
         var userModel = userDto.toModel();
         getRoleModels(userDto, userModel);
         return ResponseEntity
@@ -59,7 +63,7 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable(value = "userId") UUID userId,
-                                        @JsonView(UserDto.UserJsonView.UserUpdate.class)
+                                        @Validated(UserDto.View.UserUpdate.class)
                                         @RequestBody UserDto userDto) {
         Optional<UserModel> optionalUserModel = userService.findUserById(userId);
         if (optionalUserModel.isEmpty())
@@ -74,17 +78,18 @@ public class UserController {
 
     @PatchMapping("/{userId}/password")
     public ResponseEntity<?> updateUserPassword(@PathVariable(value = "userId") UUID userId,
-                                                @RequestBody @JsonView(UserDto.UserJsonView.UserPasswordUpdate.class) UserDto userDto) {
+                                                @Validated(UserDto.View.UserPasswordUpdate.class)
+                                                @RequestBody UserDto userDto) {
         Optional<UserModel> optionalUserModel = userService.findUserById(userId);
         if (optionalUserModel.isEmpty())
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("User not found!");
-        if(!optionalUserModel.get().getPassword().equals(userDto.getOldPassword()))
+        if (!optionalUserModel.get().getPassword().equals(userDto.getOldPassword()))
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
                     .body("Old password entered is incorrect!");
-        if(optionalUserModel.get().getPassword().equals(userDto.getPassword()))
+        if (optionalUserModel.get().getPassword().equals(userDto.getPassword()))
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
                     .body("The new password must be different from the old password!");
@@ -97,7 +102,8 @@ public class UserController {
 
     @PatchMapping("/{userId}/image")
     public ResponseEntity<?> updateUserImage(@PathVariable(value = "userId") UUID userId,
-                                             @RequestBody @JsonView(UserDto.UserJsonView.UserImageUpdate.class) UserDto userDto) {
+                                             @Validated(UserDto.View.UserImageUpdate.class)
+                                             @RequestBody UserDto userDto) {
         Optional<UserModel> optionalUserModel = userService.findUserById(userId);
         if (optionalUserModel.isEmpty())
             return ResponseEntity

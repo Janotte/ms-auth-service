@@ -9,6 +9,7 @@ import br.net.supptech.authservice.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -33,7 +34,7 @@ public class RoleController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addNewRole(@RequestBody RoleDto roleDto) {
+    public ResponseEntity<?> addNewRole(@Validated(RoleDto.View.CreateAndUpdate.class) @RequestBody RoleDto roleDto) {
         RoleModel roleModel = new RoleModel();
         Set<PermissionModel> permissionModelSet = getPermissionModels(roleDto);
         roleModel.getPermissions().addAll(permissionModelSet);
@@ -54,6 +55,7 @@ public class RoleController {
 
     @PutMapping("/{roleId}")
     public ResponseEntity<?> updateRole(@PathVariable(value = "roleId") UUID roleId,
+                                        @Validated(RoleDto.View.CreateAndUpdate.class)
                                         @RequestBody RoleDto roleDto) {
         Optional<RoleModel> optionalRoleModel = roleService.findRoleById(roleId);
         if (optionalRoleModel.isEmpty())
