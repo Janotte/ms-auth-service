@@ -4,9 +4,10 @@ import br.net.supptech.authservice.models.RoleModel;
 import br.net.supptech.authservice.repositories.RoleRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,8 +18,8 @@ public class RoleServiceImpl implements RoleService {
     RoleRepository roleRepository;
 
     @Override
-    public List<RoleModel> getAllRoles() {
-        return roleRepository.findAll();
+    public Page<RoleModel> getAllRoles(Pageable pageable) {
+        return roleRepository.findAll(pageable);
     }
 
     @Transactional

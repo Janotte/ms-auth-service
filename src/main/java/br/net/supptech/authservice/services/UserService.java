@@ -1,14 +1,15 @@
 package br.net.supptech.authservice.services;
 
 import br.net.supptech.authservice.models.UserModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService {
 
-    List<UserModel> getAllUsers();
+    Page<UserModel> getAllUsers(Pageable pageable);
 
     UserModel saveUser(UserModel userModel);
 

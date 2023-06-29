@@ -1,0 +1,554 @@
+{
+	"info": {
+		"_postman_id": "94f2f6c1-7434-4abe-ac43-2de4c3f6f8ef",
+		"name": "Micro Services",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3139548"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Auth - SignUp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Client 3\",\r\n    \"fullName\": \"System Client\",\r\n    \"email\": \"client3@supptech.net.br\",\r\n    \"password\": \"12345678\",\r\n    \"cellPhoneNumber\": \"(0xx47) 77777-7772\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{authUrl}}/auth/signup",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Permissions",
+			"item": [
+				{
+					"name": "Permissions - Get All Permissions",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{authUrl}}/permissions?size=2&page=0&sort=name,asc",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"permissions"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "sort",
+									"value": "name,asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Permissions - Create new Permission",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"permissionId\", jsonData.permissionId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"testeproducts_write\",\r\n    \"description\": \"Allows you to create or edit products, units and categories\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{authUrl}}/permissions",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"permissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Permissions - Get Permission by id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{authUrl}}/permissions/{{permissionId}}",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"permissions",
+								"{{permissionId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Permissions - Update Permissions",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"PRODUCTS_WRITE\",\r\n    \"description\": \"Allows you to create or edit products, units and categories update\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{authUrl}}/permissions/{{permissionId}}",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"permissions",
+								"{{permissionId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Permissions - Delete Permission",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{authUrl}}/permissions/{{permissionId}}",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"permissions",
+								"{{permissionId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "Roles - Get all roles",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "admin@admin.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{authUrl}}/roles?size=2&page=0&sort=name,asc",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"roles"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "sort",
+									"value": "name,asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Roles - Create new role",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"roleId\", jsonData.roleId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"teste\",\r\n    \"permissions\": [{\"permissionId\": \"{{permissionId}}\" }]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{authUrl}}/roles",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Roles - Get Roles by Id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{authUrl}}/roles/{{roleId}}",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"roles",
+								"{{roleId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Roles - Update Role",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"roleId\": \"2feed3e3-894c-4fea-9533-540de9d79d62\",\r\n    \"name\": \"TESTE1\",\r\n    \"permissions\": [\r\n        {\r\n            \"permissionId\": \"00ed915c-bb61-4f6d-88f9-1144cee5e668\",\r\n            \"name\": \"PRODUCTS_WRITE\",\r\n            \"description\": \"Allows you to create or edit products, units and categories update\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{authUrl}}/roles/{{roleId}}",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"roles",
+								"{{roleId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Roles - Delete Role",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{authUrl}}/roles/{{roleId}}",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"roles",
+								"{{roleId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get all users",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{authUrl}}/users?size=2&page=0&sort=fullName,asc",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "2"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "sort",
+									"value": "fullName,asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"userId\", jsonData.userId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Janotte\",\r\n    \"fullName\": \"Sandro Janotte\",\r\n    \"email\": \"sandrojanotte11@supptech.net.br\",\r\n    \"password\": \"12345678\",\r\n    \"cellPhoneNumber\": \"(047) 99999-1111\",\r\n    \"roles\": [{ \"roleId\": \"e1194d67-1331-4a63-80fd-175eae2b533f\"}]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{authUrl}}/users",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Users - Get user by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{authUrl}}/users/{{userId}}",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Users - Update user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Administrator\",\r\n    \"fullName\": \"System Administrator\",\r\n    \"cellPhoneNumber\": \"(0xx47) 99999-8888\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{authUrl}}/users/74565030-9e6d-40eb-8b49-d068222fbfa9",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"users",
+								"74565030-9e6d-40eb-8b49-d068222fbfa9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\": \"12345678\",\r\n    \"password\": \"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{authUrl}}/users/74565030-9e6d-40eb-8b49-d068222fbfa9/password",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"users",
+								"74565030-9e6d-40eb-8b49-d068222fbfa9",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user image",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"imageUrl\": \"/users/74565030-9e6d-40eb-8b49-d068222fbfa9.png\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{authUrl}}/users/74565030-9e6d-40eb-8b49-d068222fbfa9/image",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"users",
+								"74565030-9e6d-40eb-8b49-d068222fbfa9",
+								"image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Users - Delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{authUrl}}/users/{{userId}}",
+							"host": [
+								"{{authUrl}}"
+							],
+							"path": [
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

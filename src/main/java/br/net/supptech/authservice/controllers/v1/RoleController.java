@@ -7,6 +7,9 @@ import br.net.supptech.authservice.models.RoleModel;
 import br.net.supptech.authservice.services.PermissionService;
 import br.net.supptech.authservice.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,10 +30,11 @@ public class RoleController {
     PermissionService permissionService;
 
     @GetMapping
-    public ResponseEntity<?> getAllRoles() {
+    public ResponseEntity<?> getAllRoles(
+            @PageableDefault(sort = "roleId", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(roleService.getAllRoles());
+                .body(roleService.getAllRoles(pageable));
     }
 
     @PostMapping

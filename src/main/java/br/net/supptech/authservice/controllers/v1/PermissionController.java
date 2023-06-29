@@ -5,6 +5,9 @@ import br.net.supptech.authservice.models.PermissionModel;
 import br.net.supptech.authservice.services.PermissionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +23,11 @@ public class PermissionController {
     PermissionService permissionService;
 
     @GetMapping
-    public ResponseEntity<?> getAllPermissions() {
+    public ResponseEntity<?> getAllPermissions(
+            @PageableDefault(sort = "permissionId", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(permissionService.getAllPermissions());
+                .body(permissionService.getAllPermissions(pageable));
     }
 
     @PostMapping

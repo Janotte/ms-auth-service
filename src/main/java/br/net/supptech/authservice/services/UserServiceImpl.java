@@ -4,9 +4,10 @@ import br.net.supptech.authservice.models.UserModel;
 import br.net.supptech.authservice.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,8 +17,8 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public List<UserModel> getAllUsers() {
-        return userRepository.findAll();
+    public Page<UserModel> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     @Transactional

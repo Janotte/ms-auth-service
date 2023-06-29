@@ -7,6 +7,9 @@ import br.net.supptech.authservice.models.UserModel;
 import br.net.supptech.authservice.services.RoleService;
 import br.net.supptech.authservice.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -28,10 +31,11 @@ public class UserController {
     RoleService roleService;
 
     @GetMapping
-    public ResponseEntity<?> getAllUsers() {
+    public ResponseEntity<?> getAllUsers(
+            @PageableDefault(sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.getAllUsers());
+                .body(userService.getAllUsers(pageable));
     }
 
     @PostMapping
