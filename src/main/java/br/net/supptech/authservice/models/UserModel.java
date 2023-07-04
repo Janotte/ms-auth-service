@@ -3,6 +3,7 @@ package br.net.supptech.authservice.models;
 import br.net.supptech.authservice.enums.UserStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -44,16 +45,17 @@ public class UserModel implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private UserStatus userStatus;
-    @ManyToMany
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "TB_USERS_ROLES", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "roles_id"))
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleModel> roles = new HashSet<>();
     @Column(length = 20)
     private String cellPhoneNumber;
     @Column
     private String imageUrl;
     @CreationTimestamp
-    private OffsetDateTime createdDate;
+    private OffsetDateTime createdAt;
     @UpdateTimestamp
-    private OffsetDateTime updatedDate;
+    private OffsetDateTime updatedAt;
 }

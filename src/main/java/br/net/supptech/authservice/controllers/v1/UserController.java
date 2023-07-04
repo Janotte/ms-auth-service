@@ -6,6 +6,7 @@ import br.net.supptech.authservice.models.RoleModel;
 import br.net.supptech.authservice.models.UserModel;
 import br.net.supptech.authservice.services.RoleService;
 import br.net.supptech.authservice.services.UserService;
+import br.net.supptech.authservice.specification.SpecsTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,10 +33,11 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<?> getAllUsers(
+            SpecsTemplate.UserSpecs specs,
             @PageableDefault(sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.getAllUsers(pageable));
+                .body(userService.getAllUsers(specs, pageable));
     }
 
     @PostMapping

@@ -1,6 +1,7 @@
 package br.net.supptech.authservice.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,8 @@ public class RoleModel implements Serializable {
     private UUID roleId;
     @Column(nullable = false, unique = true, length = 30)
     private String name;
-    @ManyToMany
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "TB_ROLES_PERMISSIONS", joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private Set<PermissionModel> permissions = new HashSet<>();
