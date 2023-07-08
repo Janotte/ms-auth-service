@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -25,7 +26,7 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "TB_USERS")
-public class UserModel implements Serializable {
+public class UserModel extends RepresentationModel<UserModel> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id

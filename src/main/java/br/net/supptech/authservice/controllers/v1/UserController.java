@@ -8,6 +8,7 @@ import br.net.supptech.authservice.services.RoleService;
 import br.net.supptech.authservice.services.UserService;
 import br.net.supptech.authservice.specification.SpecsTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -20,6 +21,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -35,9 +39,15 @@ public class UserController {
     public ResponseEntity<?> getAllUsers(
             SpecsTemplate.UserSpec specs,
             @PageableDefault(sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<UserModel> allUsers = userService.getAllUsers(specs, pageable);
+        if (!allUsers.isEmpty()) {
+            for (UserModel user : allUsers.stream().toList()) {
+                user.add(linkTo(methodOn(UserController.class).findUserById(user.getUserId())).withSelfRel());
+            }
+        }
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.getAllUsers(specs, pageable));
+                .body(allUsers);
     }
 
     @PostMapping
