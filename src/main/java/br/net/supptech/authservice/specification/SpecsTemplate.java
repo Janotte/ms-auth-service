@@ -14,9 +14,10 @@ public class SpecsTemplate {
             @Spec(path = "fullName", spec = Like.class),
             @Spec(path = "email", spec = Like.class),
             @Spec(path = "userStatus", spec = Equal.class),
-            @Spec(path = "createdAt", spec = Between.class),
-            @Spec(path = "updatedAt", spec = Between.class)
+            @Spec(path = "createdAt", params = {"createdAfter", "createdAfter"}, spec = Between.class),
+            @Spec(path = "updatedAt", params = {"updatedAfter", "updatedBefore"}, spec = Between.class)
     })
-    public interface UserSpecs extends Specification<UserModel> {
+    public interface UserSpec extends Specification<UserModel> {
     }
+
 }

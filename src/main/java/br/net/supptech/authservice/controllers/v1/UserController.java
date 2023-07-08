@@ -33,7 +33,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<?> getAllUsers(
-            SpecsTemplate.UserSpecs specs,
+            SpecsTemplate.UserSpec specs,
             @PageableDefault(sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity
                 .status(HttpStatus.OK)
